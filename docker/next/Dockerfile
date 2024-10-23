@@ -11,9 +11,7 @@ RUN apt update && \
     nano \
     make
 
-COPY ./docker/next/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+WORKDIR /app
 
-USER node
-
-ENTRYPOINT ["/entrypoint.sh"]
+COPY ./next/package*.json ./
+RUN npm install
