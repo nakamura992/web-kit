@@ -30,7 +30,12 @@ command-list:
 	@echo " make stop-certbot      - docker compose stop certbot"
 	@echo " make ps                - docker compose ps"
 	@echo " make create-next       - docker compose exec next bash -c \"npx create-next-app@latest\""
+	@echo " make maintenance-on    - docker compose exec nginx touch /usr/share/nginx/html/maintenance/maintenance_mode"
+	@echo " make maintenance-off   - docker compose exec nginx rm -f /usr/share/nginx/html/maintenance/maintenance_mode"
 	@echo " make nginx-reload      - make nginx-test && docker compose exec nginx nginx -s reload"
+	@echo " make nginx-test        - docker compose exec nginx nginx -t"
+	@echo " make nginx-restart     - docker compose restart nginx"
+    
 # Docker commands
 build:
 	docker compose build
@@ -128,6 +133,17 @@ ps:
 create-next:
 	docker compose run --rm next npx create-next-app@latest
 
+MAINTENANCE_FILE := /usr/share/nginx/html/maintenance/maintenance_mode
+# メンテナンスモードを有効にする
+maintenance-on:
+	@docker compose exec nginx touch $(MAINTENANCE_FILE)
+	@make nginx-reload
+
+# メンテナンスモードを無効にする
+maintenance-off:
+	@docker compose exec nginx rm -f $(MAINTENANCE_FILE)
+	@make nginx-reload
+
 # nginxの設定ファイルのテストとリロード
 nginx-reload:
 	make nginx-test
@@ -137,3 +153,8 @@ nginx-reload:
 
 nginx-test:
 	docker compose exec nginx nginx -t
+
+# Nginxを安全に再起動（ダウンタイムあり）
+nginx-restart:
+	@make nginx-test
+	@docker compose restart nginx
