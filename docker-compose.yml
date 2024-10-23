@@ -19,11 +19,11 @@ services:
       context: .
       dockerfile: ./docker/next/${NEXT_DOCKERFILE:-Dockerfile}
     volumes:
+      - node_modules-volume:/app/node_modules
       - ./next/:/app
     depends_on:
       - laravel
-    command: npm run dev
-    working_dir: /app
+    command: ["npm", "run", "dev"]
 
   nginx:
     container_name: ${APP_NAME}-nginx
@@ -39,6 +39,7 @@ services:
     volumes:
       - ./src/:/var/www/html
       - ./docker/nginx/${NGINX_CONF:-default.conf}:/etc/nginx/conf.d/default.conf
+      - ./maintenance:/usr/share/nginx/html/maintenance
       - ./logs/nginx:/var/log/nginx
       - ./docker/certbot/conf:/etc/letsencrypt:ro
       - ./docker/certbot/www:/var/www/certbot:ro
@@ -118,3 +119,5 @@ volumes:
     name: ${APP_NAME}-storage-volume
   vendor-volume:
     name: ${APP_NAME}-vendor-volume
+  node_modules-volume:
+    name: ${APP_NAME}-node_modules-volume
