@@ -8,7 +8,7 @@ command-list:
 	@echo " make down                      - docker compose down"
 	@echo " make down-opt                  - docker compose down $$service"
 	@echo " make laravel                   - docker compose exec laravel bash"
-	@echo " make root-laravel              - docker compose exec -u root laravel /bin/bash"
+	@echo " make r-laravel                 - docker compose exec -u root laravel /bin/bash"
 	@echo " make nginx                     - docker compose exec nginx sh"
 	@echo " make to-next                   - docker compose exec next sh"
 	@echo " make vdown                     - docker compose down -v"
@@ -30,6 +30,7 @@ command-list:
 	@echo " make restart-opt               - docker compose restart $$service"
 	@echo " make ps                        - docker compose ps"
 	@echo " make create-next               - docker compose run --rm -w / next npx create-next-app@latest /app"
+	@echo " make create-laravel            - docker compose run --rm -w /var/www/html laravel composer create-project --prefer-dist laravel/laravel ."
 	@echo " make maintenance-on            - make nginx-test && docker compose exec nginx touch $(MAINTENANCE_FILE)"
 	@echo " make maintenance-off           - make nginx-test && docker compose exec nginx rm -f $(MAINTENANCE_FILE)"
 	@echo " make nginx-reload              - make nginx-test && docker compose exec nginx nginx -s reload"
@@ -61,7 +62,7 @@ down-opt:
 laravel:
 	docker compose exec laravel bash
 
-root-laravel:
+r-laravel:
 	docker compose exec -u root laravel /bin/bash
 
 nginx:
@@ -131,6 +132,9 @@ ps:
 
 create-next:
 	docker compose run --rm -w / next npx create-next-app /app
+
+create-laravel:
+	docker compose run --rm -w /var/www/html laravel composer create-project --prefer-dist laravel/laravel .
 
 MAINTENANCE_FILE := /usr/share/nginx/html/maintenance/maintenance_mode
 # メンテナンスモードを有効にする
