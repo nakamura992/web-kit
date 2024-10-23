@@ -1,40 +1,39 @@
 command-list:
 	@echo "command-list:"
-	@echo " make build             - docker compose build"
-	@echo " make build-up          - docker compose up -d --build"
-	@echo " make nbuild            - docker compose build --no-cache"
-	@echo " make up                - docker compose up -d"
-	@echo " make up-opt            - docker compose up -d $$service"
-	@echo " make down              - docker compose down"
-	@echo " make down-opt          - docker compose down $$service"
-	@echo " make laravel           - docker compose exec laravel bash"
-	@echo " make root-laravel      - docker compose exec -u root laravel /bin/bash"
-	@echo " make nginx             - docker compose exec nginx sh"
-	@echo " make to-next           - docker compose exec next sh"
-	@echo " make vdown             - docker compose down -v"
-	@echo " make v-list            - docker volume ls"
-	@echo " make rm-v              - docker volume rm"
-	@echo " make vendor-to-host    - docker compose cp laravel:/var/www/html/vendor vendor-volume"
-	@echo " make vendor-to-app     - docker compose cp ./vendor laravel:/var/www/html/vendor"
-	@echo " make storage-to-host    - docker compose cp laravel:/var/www/html/storage storage-volume"
-	@echo " make storage-to-app     - docker compose cp ./storage laravel:/var/www/html/storage"
-	@echo " make node_modules-to-host    - docker compose cp next:/app/node_modules node_modules-volume"
-	@echo " make node_modules-to-app     - docker compose cp ./next/node_modules next:/app/node_modules"
-	@echo " make log               - docker compose logs"
-	@echo " make log-opt           - docker compose logs $$service"
-	@echo " make stop              - docker compose stop"
-	@echo " make stop-opt          - docker compose stop $$service"
-	@echo " make start             - docker compose start"
-	@echo " make start-opt         - docker compose start $$service"
-	@echo " make restart           - docker compose restart"
-	@echo " make restart-opt       - docker compose restart $$service"
-	@echo " make ps                - docker compose ps"
-	@echo " make create-next       - docker compose run --rm -w / next npx create-next-app@latest /app"
-	@echo " make maintenance-on    - make nginx-test && docker compose exec nginx touch $(MAINTENANCE_FILE)"
-	@echo " make maintenance-off   - make nginx-test && docker compose exec nginx rm -f $(MAINTENANCE_FILE)"
-	@echo " make nginx-reload      - make nginx-test && docker compose exec nginx nginx -s reload"
-	@echo " make nginx-test        - docker compose exec nginx nginx -t"
-	@echo " make nginx-restart     - make nginx-test && docker compose restart nginx"
+	@echo " make build                     - docker compose build"
+	@echo " make build-up                  - docker compose up -d --build"
+	@echo " make nbuild                    - docker compose build --no-cache"
+	@echo " make up                        - docker compose up -d"
+	@echo " make up-opt                    - docker compose up -d $$service"
+	@echo " make down                      - docker compose down"
+	@echo " make down-opt                  - docker compose down $$service"
+	@echo " make laravel                   - docker compose exec laravel bash"
+	@echo " make root-laravel              - docker compose exec -u root laravel /bin/bash"
+	@echo " make nginx                     - docker compose exec nginx sh"
+	@echo " make to-next                   - docker compose exec next sh"
+	@echo " make vdown                     - docker compose down -v"
+	@echo " make v-list                    - docker volume ls"
+	@echo " make rm-v                      - docker volume rm"
+	@echo " make vendor-to-host            - docker compose cp laravel:/var/www/html/vendor vendor-volume"
+	@echo " make vendor-to-container       - docker compose cp ./vendor laravel:/var/www/html/vendor"
+	@echo " make storage-to-host           - docker compose cp laravel:/var/www/html/storage storage-volume"
+	@echo " make storage-to-container      - docker compose cp ./storage laravel:/var/www/html/storage"
+	@echo " make node_m-to-host            - docker compose cp next:/app/node_modules node_modules-volume"
+	@echo " make node_m-to-container       - docker compose cp ./next/node_modules next:/app/node_modules"
+	@echo " make log                       - docker compose logs"
+	@echo " make log-opt                   - docker compose logs $$service"
+	@echo " make stop                      - docker compose stop"
+	@echo " make stop-opt                  - docker compose stop $$service"
+	@echo " make start                     - docker compose start"
+	@echo " make start-opt                 - docker compose start $$service"
+	@echo " make restart                   - docker compose restart"
+	@echo " make restart-opt               - docker compose restart $$service"
+	@echo " make ps                        - docker compose ps"
+	@echo " make create-next               - docker compose run --rm -w / next npx create-next-app@latest /app"
+	@echo " make maintenance-on            - make nginx-test && docker compose exec nginx touch $(MAINTENANCE_FILE)"
+	@echo " make maintenance-off           - make nginx-test && docker compose exec nginx rm -f $(MAINTENANCE_FILE)"
+	@echo " make nginx-reload              - make nginx-test && docker compose exec nginx nginx -s reload"
+	@echo " make nginx-test                - docker compose exec nginx nginx -t"
 # Docker commands
 build:
 	docker compose build
@@ -93,10 +92,10 @@ storage-to-host:
 storage-to-container:
 	docker compose cp ./src/storage laravel:/var/www/html/
 
-node_modules-to-host:
+node_m-to-host:
 	docker compose cp next:/app/node_modules ./next/
 
-node_modules-to-container:
+node_m-to-container:
 	docker compose cp ./next/node_modules next:/app/
 
 log:
