@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メンテナンス中</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .maintenance-container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        .gear-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: spin 5s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="maintenance-container">
+        <div class="gear-icon">⚙️</div>
+        <h1>メンテナンス中</h1>
+        <p>ただいまシステムのメンテナンス中です。<br>ご不便をおかけして申し訳ありませんが、しばらくお待ちください。</p>
+        <p>予定終了時刻: 未定</p>
+    </div>
+
+    <script>
+        function checkMaintenance() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectUrl = urlParams.get('original_request');
+            window.location.href = redirectUrl;
+        }
+        window.onload = checkMaintenance;
+    </script>
+</body>
+</html>
