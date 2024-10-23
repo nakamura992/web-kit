@@ -4,38 +4,37 @@ command-list:
 	@echo " make build-up          - docker compose up -d --build"
 	@echo " make nbuild            - docker compose build --no-cache"
 	@echo " make up                - docker compose up -d"
+	@echo " make up-opt            - docker compose up -d $$service"
 	@echo " make down              - docker compose down"
+	@echo " make down-opt          - docker compose down $$service"
 	@echo " make laravel           - docker compose exec laravel bash"
 	@echo " make root-laravel      - docker compose exec -u root laravel /bin/bash"
 	@echo " make nginx             - docker compose exec nginx sh"
 	@echo " make to-next           - docker compose exec next sh"
 	@echo " make vdown             - docker compose down -v"
+	@echo " make v-list            - docker volume ls"
+	@echo " make rm-v              - docker volume rm"
 	@echo " make vendor-to-host    - docker compose cp laravel:/var/www/html/vendor vendor-volume"
 	@echo " make vendor-to-app     - docker compose cp ./vendor laravel:/var/www/html/vendor"
+	@echo " make storage-to-host    - docker compose cp laravel:/var/www/html/storage storage-volume"
+	@echo " make storage-to-app     - docker compose cp ./storage laravel:/var/www/html/storage"
+	@echo " make node_modules-to-host    - docker compose cp next:/app/node_modules node_modules-volume"
+	@echo " make node_modules-to-app     - docker compose cp ./next/node_modules next:/app/node_modules"
 	@echo " make log               - docker compose logs"
-	@echo " make log-laravel       - docker compose logs laravel"
-	@echo " make log-next          - docker compose logs next"
-	@echo " make log-nginx         - docker compose logs nginx"
-	@echo " make log-mysql         - docker compose logs mysql"
-	@echo " make log-mysql-backup  - docker compose logs mysql-backup"
-	@echo " make log-pma           - docker compose logs pma"
-	@echo " make log-certbot       - docker compose logs certbot"
+	@echo " make log-opt           - docker compose logs $$service"
 	@echo " make stop              - docker compose stop"
-	@echo " make stop-laravel      - docker compose stop laravel"
-	@echo " make stop-next         - docker compose stop next"
-	@echo " make stop-nginx        - docker compose stop nginx"
-	@echo " make stop-mysql        - docker compose stop mysql"
-	@echo " make stop-mysql-backup - docker compose stop mysql-backup"
-	@echo " make stop-pma          - docker compose stop pma"
-	@echo " make stop-certbot      - docker compose stop certbot"
+	@echo " make stop-opt          - docker compose stop $$service"
+	@echo " make start             - docker compose start"
+	@echo " make start-opt         - docker compose start $$service"
+	@echo " make restart           - docker compose restart"
+	@echo " make restart-opt       - docker compose restart $$service"
 	@echo " make ps                - docker compose ps"
-	@echo " make create-next       - docker compose exec next bash -c \"npx create-next-app@latest\""
-	@echo " make maintenance-on    - docker compose exec nginx touch /usr/share/nginx/html/maintenance/maintenance_mode"
-	@echo " make maintenance-off   - docker compose exec nginx rm -f /usr/share/nginx/html/maintenance/maintenance_mode"
+	@echo " make create-next       - docker compose run --rm -w / next npx create-next-app@latest /app"
+	@echo " make maintenance-on    - make nginx-test && docker compose exec nginx touch $(MAINTENANCE_FILE)"
+	@echo " make maintenance-off   - make nginx-test && docker compose exec nginx rm -f $(MAINTENANCE_FILE)"
 	@echo " make nginx-reload      - make nginx-test && docker compose exec nginx nginx -s reload"
 	@echo " make nginx-test        - docker compose exec nginx nginx -t"
-	@echo " make nginx-restart     - docker compose restart nginx"
-    
+	@echo " make nginx-restart     - make nginx-test && docker compose restart nginx"
 # Docker commands
 build:
 	docker compose build
@@ -49,8 +48,16 @@ nbuild:
 up:
 	docker compose up -d
 
+up-opt:
+	@read -p "service name: " service; \
+	docker compose up -d $$service
+
 down:
 	docker compose down
+
+down-opt:
+	@read -p "service name: " service; \
+	docker compose down $$service
 
 laravel:
 	docker compose exec laravel bash
@@ -67,71 +74,64 @@ to-next:
 vdown:
 	docker compose down -v
 
+v-list:
+	docker volume ls
+
+rm-v:
+	@read -p "volume name: " volume; \
+	docker volume rm $$volume
+
 vendor-to-host:
 	docker compose cp laravel:/var/www/html/vendor ./src/
 
 vendor-to-container:
 	docker compose cp ./src/vendor laravel:/var/www/html/
 
-prod-up:
-	docker compose -f docker-compose.prod.yml up -d
+storage-to-host:
+	docker compose cp laravel:/var/www/html/storage ./src/
 
-prod-up-build:
-	docker compose -f docker-compose.prod.yml up -d --build
+storage-to-container:
+	docker compose cp ./src/storage laravel:/var/www/html/
 
-log-laravel:
-	docker compose logs laravel
+node_modules-to-host:
+	docker compose cp next:/app/node_modules ./next/
 
-log-next:
-	docker compose logs next
-
-log-nginx:
-	docker compose logs nginx
-
-log-mysql:
-	docker compose logs mysql
-
-log-pma:
-	docker compose logs pma
-
-log-certbot:
-	docker compose logs certbot
-
-log-mysql-backup:
-	docker compose logs mysql-backup
+node_modules-to-container:
+	docker compose cp ./next/node_modules next:/app/
 
 log:
 	docker compose logs
 
+log-opt:
+	@read -p "service name: " service; \
+	docker compose logs $$service
+
 stop:
 	docker compose stop
 
-stop-laravel:
-	docker compose stop laravel
+stop-opt:
+	@read -p "service name: " service; \
+	docker compose stop $$service
 
-stop-next:
-	docker compose stop next
+start:
+	docker compose start
 
-stop-nginx:
-	docker compose stop nginx
+start-opt:
+	@read -p "service name: " service; \
+	docker compose start $$service
 
-stop-mysql:
-	docker compose stop mysql
+restart:
+	docker compose restart
 
-stop-pma:
-	docker compose stop pma
-
-stop-certbot:
-	docker compose stop certbot
-
-stop-mysql-backup:
-	docker compose stop mysql-backup
+restart-opt:
+	@read -p "service name: " service; \
+	docker compose restart $$service
 
 ps:
 	docker compose ps
 
 create-next:
-	docker compose run --rm next npx create-next-app@latest
+	docker compose run --rm -w / next npx create-next-app /app
 
 MAINTENANCE_FILE := /usr/share/nginx/html/maintenance/maintenance_mode
 # メンテナンスモードを有効にする
@@ -153,8 +153,3 @@ nginx-reload:
 
 nginx-test:
 	docker compose exec nginx nginx -t
-
-# Nginxを安全に再起動（ダウンタイムあり）
-nginx-restart:
-	@make nginx-test
-	@docker compose restart nginx
