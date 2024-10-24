@@ -24,6 +24,8 @@ services:
     depends_on:
       - laravel
     command: ["npm", "run", "dev"]
+    environment:
+      - WATCHPACK_POLLING=true
 
   nginx:
     container_name: ${APP_NAME}-nginx
