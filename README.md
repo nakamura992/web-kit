@@ -17,3 +17,14 @@ npx create-next-app next
 ```
 composer create-project laravel/laravel src
 ```
+
+## cursor 
+`/.cursor/rules/dev.mdc`
+
+cursorルールの
+> 毎回以下を参照してください。
+>
+> @Laravel12
+>
+> @Next.js15.2
+こちらはLaravel12のドキュメントNext15.2のドキュメントをセットする。
