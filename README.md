@@ -27,4 +27,5 @@ cursorルールの
 > @Laravel12
 >
 > @Next.js15.2
+
 こちらはLaravel12のドキュメントNext15.2のドキュメントをセットする。
