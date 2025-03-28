@@ -9,6 +9,7 @@ command-list:
 	@echo " make down-opt                  - docker compose down $$service"
 	@echo " make laravel                   - docker compose exec laravel bash"
 	@echo " make r-laravel                 - docker compose exec -u root laravel /bin/bash"
+	@echo " make nextjs                    - docker compose exec next bash"
 	@echo " make nginx                     - docker compose exec nginx sh"
 	@echo " make to-next                   - docker compose exec next sh"
 	@echo " make vdown                     - docker compose down -v"
@@ -64,6 +65,9 @@ laravel:
 
 r-laravel:
 	docker compose exec -u root laravel /bin/bash
+
+nextjs:
+	docker compose exec next bash
 
 nginx:
 	docker compose exec nginx bash
