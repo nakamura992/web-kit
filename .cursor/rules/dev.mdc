@@ -1,0 +1,45 @@
+毎回以下を参照してください。
+@Laravel12
+@Next.js15.2
+
+Laravelの開発の注意点
+
+/src以下がLaravelのプロジェクトになる。
+
+バリデーションについて
+    ・ルールの項目は配列形式で書く
+    例：
+        'email' => ['required', 'email'],
+    ・ディレクトリ構成のパスは同じようにする
+    ・メソッド(キャメル).コントローラの名前部分＋Request
+    例：
+        命名規則としては
+        コントローラのパスが/src/app/Http/Controllers/api/admin/AuthController.phpで
+        メソッドがstoreに対してだったら、
+        /src/app/Http/Requests/api/admin/StoreAuthRequest.php
+        とする。
+    ・バリデーションはリクエストクラスを作りそこに記述する
+
+テストコードについて
+    ・コントローラの場合のテストについてはバリデーション以外をテストし、ファイル名やパスは以下のようにする。
+    例：
+        コントローラのパスが/src/app/Http/Controllers/api/admin/AuthController.phpの場合
+        テストコードのファイル名とパスは次のようになる。
+        /src/tests/Feature/api/admin/AuthControllerTest.php
+    ・リクエストクラスのバリデーションテストの場合パスを同じようにするがファイル名はコントローラの名前RequestTest.phpとする
+    例：
+        リクエストのパスが/src/app/Http/Requests/api/StoreAdminRequest.phpの場合
+        テストコードのファイル名とパスは次のようになる。
+        /src/tests/Feature/api/AdminRequestTest.php
+    ・テストコードを作成したときに、ファクトリーも作る。
+        ファクトリーについて
+        ・必ず/next/src/types/以下のファイルを参照してファクトリーを作る。
+        例：
+            例えばadmin_usersテーブルのファクトリを作る場合、
+            /next/src/types/adminUsers.tsを参照しDBカラムや型を確認する
+            命名としては/src/database/factories/AdminUserFactory.phpという形式にする。
+
+
+
+Nextjsの開発の注意点
+
