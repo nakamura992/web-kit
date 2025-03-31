@@ -89,7 +89,7 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      PMA_ABSOLUTE_URI: ${PHPMYADMIN_ABSOLUTE_URI:-http://localhost/pma}
+      PMA_ABSOLUTE_URI: ${PHPMYADMIN_ABSOLUTE_URI:-http://localhost/phpmyadmin}
     ports:
       - "8080:80"
     volumes:
